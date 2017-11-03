@@ -1,0 +1,2 @@
+Main-Class: net.ktamido.double_array.Main
+

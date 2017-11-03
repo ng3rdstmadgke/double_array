@@ -1,0 +1,4 @@
+/target
+/dict/*.bin
+/dict/*.csv
+!/dict/sample_dict.csv
