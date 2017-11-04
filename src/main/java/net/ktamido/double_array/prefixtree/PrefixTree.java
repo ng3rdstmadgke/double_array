@@ -15,7 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.Files;
 
-public class PrefixTree implements Serializable {
+public class PrefixTree<E extends MorphemeData> implements Serializable {
 
 	/**
 	 * 単語追加時に遷移先ノード情報を保存しておくためのクラス
@@ -32,7 +32,7 @@ public class PrefixTree implements Serializable {
 	private int size;
 	private int[] base;
 	private int[] check;
-	private MorphemeData[][] data;
+	private E[][] data;
 
 	public PrefixTree() {
 		this(65535);
@@ -43,7 +43,8 @@ public class PrefixTree implements Serializable {
 		base = new int[size];
 		base[1] = 1;
 		check = new int[size];
-		data = new MorphemeData[size][0];
+		E[][] d = (E[][]) new MorphemeData[size][0];
+		data = d;
 		Arrays.fill(data, null);
 	}
 
@@ -90,14 +91,14 @@ public class PrefixTree implements Serializable {
 	 * wordを探索し、登録されている形態素データを取得する
 	 * 形態素データが見つからなかった場合はnullを返す
 	 */
-	public MorphemeData[] get(String word) {
+	public E[] get(String word) {
 		SimpleEntry<Integer,Integer>  entry = this._get(word);
 		if (entry.getValue().intValue() == -1) {
 			int index = entry.getKey().intValue();
-			MorphemeData[] ret = (data[index] != null) ? Arrays.copyOf(data[index], data[index].length) : null;
+			E[] ret = (data[index] != null) ? Arrays.copyOf(data[index], data[index].length) : null;
 			if (ret != null) {
-				for (MorphemeData i : ret) {
-					if (i != null) i = i.clone();
+				for (E i : ret) {
+					if (i != null) i = (E) i.clone();
 				}
 			}
 			return ret;
@@ -142,16 +143,16 @@ public class PrefixTree implements Serializable {
 	 * 形態素データを登録する
 	 * 登録に成功した場合はtrue, すでに登録されていて登録しなかった場合はfalseを返す
 	 */
-	public boolean add (MorphemeData m) {
+	public boolean add (E m) {
 		// 形態素データを格納するためのインデックスを取得
 		int index = _add(m.getSurface());
 		// dataに形態素を登録
 		if (data[index] == null) {
 			// 形態素データの配列そのものが存在しない場合は生成
-			data[index] = new MorphemeData[] {m};
+			data[index] = (E[]) new MorphemeData[] {m};
 		} else {
 			// すでに登録済みの形態素データの場合は登録せずにfalseを返す
-			for (MorphemeData i : data[index]) {
+			for (E i : data[index]) {
 				if (m.equals(i)) {
 					return false;
 				}

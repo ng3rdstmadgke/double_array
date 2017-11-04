@@ -50,7 +50,7 @@ public class Main {
 
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
-		PrefixTree pt = new PrefixTree();
+		PrefixTree<Morpheme> pt = new PrefixTree<Morpheme>();
 		while (true) {
 			System.out.print("command : ");
 			String mode = sc.next();
@@ -89,7 +89,7 @@ public class Main {
 				} else if (mode.equals("serialize")) {
 					pt.serialize(param);
 				} else if (mode.equals("deserialize")) {
-					PrefixTree tmp = pt.deserialize(param);
+					PrefixTree<Morpheme> tmp = pt.deserialize(param);
 					if (tmp != null) pt = tmp;
 				} else if (mode.equals("import")) {
 					Path path = Paths.get(param);
