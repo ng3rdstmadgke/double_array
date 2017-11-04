@@ -150,7 +150,7 @@ public class PrefixTree implements Serializable {
 			// 形態素データの配列そのものが存在しない場合は生成
 			data[index] = new MorphemeData[] {m};
 		} else {
-			// すでに登録済みの形態素データの場合は登録せずにnullを返す
+			// すでに登録済みの形態素データの場合は登録せずにfalseを返す
 			for (MorphemeData i : data[index]) {
 				if (m.equals(i)) {
 					return false;

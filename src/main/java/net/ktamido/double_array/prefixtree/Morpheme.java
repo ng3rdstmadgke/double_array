@@ -20,6 +20,7 @@ abstract class MorphemeData implements Serializable, Cloneable {
 	abstract public int hashCode();
 	abstract public boolean equals(Object obj);
 	abstract public String toString();
+
 	@Override
 	public MorphemeData clone() {
 		MorphemeData ret = null;
@@ -52,28 +53,32 @@ public class Morpheme extends MorphemeData implements Cloneable {
 		this.pos     = pos;
 		this.yomi    = yomi;
 	}
+
 	@Override
-		public int hashCode() {
-			return Objects.hash(surface, leftId, rightId, cost, pos, yomi);
-		}
+	public int hashCode() {
+		return Objects.hash(surface, leftId, rightId, cost, pos, yomi);
+	}
+
 	@Override
-		public boolean equals(Object obj) {
-			if (this == obj) return true;
-			if (obj == null) return false;
-			if (getClass() != obj.getClass()) return false;
-			Morpheme other = (Morpheme) obj;
-			if (!surface.equals(other.surface)) return false;
-			if (leftId != other.leftId) return false;
-			if (rightId != other.rightId) return false;
-			if (cost != other.cost) return false;
-			if (!pos.equals(other.pos)) return false;
-			if (!yomi.equals(other.yomi)) return false;
-			return true;
-		}
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		Morpheme other = (Morpheme) obj;
+		if (!surface.equals(other.surface)) return false;
+		if (leftId != other.leftId) return false;
+		if (rightId != other.rightId) return false;
+		if (cost != other.cost) return false;
+		if (!pos.equals(other.pos)) return false;
+		if (!yomi.equals(other.yomi)) return false;
+		return true;
+	}
+
 	@Override
 	public String toString() {
 		return "[" + surface + ", " + cost + ", " + pos + "]";
 	}
+
 	@Override
 	public Morpheme clone() {
 		Morpheme ret = null;
