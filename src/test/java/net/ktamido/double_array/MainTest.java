@@ -1,38 +1,43 @@
 package net.ktamido.double_array;
 
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import static org.junit.Assert.*;
+import org.junit.Test;
+import net.ktamido.double_array.prefixtree.*;
+import java.nio.charset.StandardCharsets;
+import java.io.*;
+import java.nio.file.*;
 
-/**
- * Unit test for simple App.
- */
-public class MainTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public MainTest( String testName )
-    {
-        super( testName );
-    }
+public class MainTest {
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( MainTest.class );
-    }
+	@Test
+	public void run_all() {
+		Path path = Paths.get("dict/sample_dict.csv");
+		PrefixTree pt = new PrefixTree();
+		Main.addFromDictionaryFile(path, StandardCharsets.UTF_8, pt);
+		
+		int failCount = 0;
+		try (BufferedReader br = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				String word = line.split(",")[0];
+				if (pt.get(word) == null) failCount++;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testMain()
-    {
-        assertTrue( true );
-    }
+		pt.serialize("dict/sample_dict.bin");
+		PrefixTree tmp = pt.deserialize("dict/sample_dict.bin");
+		try (BufferedReader br = Files.newBufferedReader(path, StandardCharsets.UTF_8)) {
+			String line = null;
+			while ((line = br.readLine()) != null) {
+				String word = line.split(",")[0];
+				if (tmp.get(word) == null) failCount++;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		assertEquals(0, failCount);
+	}
 }
